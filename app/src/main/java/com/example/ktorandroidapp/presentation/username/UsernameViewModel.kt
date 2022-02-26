@@ -14,5 +14,5 @@ class UsernameViewModel @Inject constructor(
     private val _usernameText = mutableStateOf("")
     val usernameText: State<String> = _usernameText
 
-    
+
 }
