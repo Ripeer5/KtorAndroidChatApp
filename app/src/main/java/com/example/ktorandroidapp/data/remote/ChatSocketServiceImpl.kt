@@ -23,7 +23,9 @@ class ChatSocketServiceImpl(
     override suspend fun initSession(username: String): Ressource<Unit> {
         return try {
             socket = client.webSocketSession {
-                url(ChatSocketService.Endpoints.chatSocket.url)
+                url(
+                    "${ChatSocketService.Endpoints.chatSocket.url}?.username=$username"
+                )
             }
             if (socket?.isActive == true) {
                 return Ressource.Success(Unit)
@@ -45,14 +47,14 @@ class ChatSocketServiceImpl(
     override fun observeMessages(): Flow<Message> {
         return try {
             socket?.incoming?.receiveAsFlow()?.filter { it is Frame.Text }
-                ?.map{
+                ?.map {
                     val json = (it as? Frame.Text)?.readText() ?: ""
                     val messageDto = Json.decodeFromString<MessageDto>(json)
                     messageDto.toMessage()
-                } ?: flow{ }
+                } ?: flow { }
         } catch (e: Exception) {
             e.printStackTrace()
-            flow {  }
+            flow { }
         }
     }
 

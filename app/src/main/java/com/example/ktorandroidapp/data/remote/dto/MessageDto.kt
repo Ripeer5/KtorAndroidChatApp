@@ -8,12 +8,12 @@ import java.util.*
 @Serializable
 data class MessageDto(
     val text: String,
-    val timestanp: Long,
+    val timestamp: Long,
     val username: String,
     val id: String
 ){
     fun toMessage(): Message {
-        val date = Date(timestanp)
+        val date = Date(timestamp)
         val formattedDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(date)
         return Message(
             text,
